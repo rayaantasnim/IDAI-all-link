@@ -1,0 +1,117 @@
+/* Base Background */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  background-size: 400% 400%;
+  animation: bgShift 20s ease infinite;
+  color: #fff;
+  text-align: center;
+}
+
+/* Title */
+h1 {
+  font-size: 2.8rem;
+  margin-top: 30px;
+  text-shadow: 0 0 20px #00ffff, 0 0 40px #ff00ff;
+}
+
+h3 {
+  font-size: 1.6rem;
+  margin-bottom: 40px;
+  text-shadow: 0 0 15px #ff69b4, 0 0 25px #00ff7f;
+}
+
+/* Image */
+img {
+  max-width: 80%;
+  border-radius: 15px;
+  box-shadow: 0 0 25px rgba(255,255,255,0.6);
+  margin-bottom: 30px;
+}
+
+/* Neon Buttons */
+a.btn {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 15px 25px;
+  border-radius: 50px;
+  border: none;
+  color: #fff;
+  background: linear-gradient(45deg, #ff00ff, #00ffff, #ff4500, #32cd32);
+  background-size: 300% 300%;
+  animation: btnShift 6s linear infinite;
+  box-shadow: 0 0 20px #00ffff, 0 0 40px #ff00ff;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+a.btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px #ffff00, 0 0 50px #ff00ff;
+}
+
+/* Background Animation */
+@keyframes bgShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Button Gradient Animation */
+@keyframes btnShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+h1, h3, a.btn {
+  color: #fff;
+  text-shadow: 
+    0 0 10px #ffffff,
+    0 0 20px #ff0000,
+    0 0 40px #ff0000,
+    0 0 80px #ff0000;
+}
+
+/* Normal screen */
+img {
+  width: 50%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Mobile screen (≤1100px) */
+@media (max-width: 1100px) {
+  img {
+    width: 75%;
+  }
+}
+
+/* Media Query for Mobile (max-width: 1100px) */
+@media (max-width: 1100px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  img {
+    max-width: 95%;
+  }
+
+  a.btn {
+    font-size: 1rem;
+    padding: 12px 20px;
+    width: 90%;
+    min-width:250px;
+    margin:auto !important;
+    display: block;
+  }
+
+  .d-grid {
+    gap: 15px;
+  }
+}

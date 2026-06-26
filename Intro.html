@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDAI Universe: To Forge the future</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000; /* শুরুতে ১ সেকেন্ড সম্পূর্ণ অন্ধকার */
+            font-family: 'Algerian', 'Georgia', 'Times New Roman', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .content-container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 85%;
+        }
+
+        .intro-img {
+            order: 1; 
+            width: 320px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+            opacity: 0;
+            margin-bottom: 25px;
+        }
+
+        .text-line {
+            order: 2;
+            opacity: 0;
+            font-size: 1.65rem;
+            letter-spacing: 1px;
+            margin: 12px 0;
+            position: relative;
+            background: linear-gradient(45deg, #00ffff, #ffffff, #00e1ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            overflow: hidden;
+        }
+
+        /* অ্যানিমেশন ট্রিগার ক্লাস */
+        .animate-text {
+            animation: fadeInOnly 1s forwards;
+        }
+        .animate-img {
+            animation: fadeInOnly 1.5s forwards;
+        }
+
+        @keyframes fadeInOnly {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* টেক্সটের ওপর দিয়ে আলোর ঝলকানি (Light Sweep) */
+        .text-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            transform: skewX(-25deg);
+        }
+        .sweep-effect::after {
+            animation: lightSweep 1.2s ease-in-out forwards;
+        }
+
+        @keyframes lightSweep {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        @media (max-width: 1100px) {
+            .intro-img { width: 240px; min-width:90%; margin-bottom: 10px; margin: 0px !important;}
+            .text-line { font-size: 1.25rem; margin: 8px 0; font-family: Times New Roman;}
+        }
+        
+        .nebula-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(0,255,255,0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 3;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="spaceCanvas"></canvas>
+    <div class="nebula-overlay" id="nebula"></div>
+
+    <div class="content-container" id="mainContent">
+        <img src="Intro.png" alt="Intro Image" class="intro-img" id="introImg">
+        <div class="text-line" id="l1">One Universe of Infinite Intelligence.</div>
+        <div class="text-line" id="l2">Beyond Every Imagination.</div>
+        <div class="text-line" id="l3">Innovation Among the Stars.</div>
+        <div class="text-line" id="l4">Powering Humanity Forward.</div>
+        <div class="text-line" id="l5">The Future Begins Here.</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('spaceCanvas');
+        const ctx = canvas.getContext('2d');
+        const mainContent = document.getElementById('mainContent');
+        const introImg = document.getElementById('introImg');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const bgLayers = [[], [], []]; 
+        const driftingStars = [];
+        const heavyMeteors = [];
+        const supernovaComets = [];
+
+        let currentPhase = 0;
+        let speedMultiplier = 1.0;
+        let launchSupernova = false;
+        let supernovaRadius = 0;
+        let supernovaAlpha = 0;
+        let showFlash = false;
+        let shockwaveRadius = 0;
+        let isShaking = false;
+
+        // স্বয়ংক্রিয় স্টার্ট লজিক (পেজ লোড হওয়ার সাথে সাথেই কার্যকর হবে)
+        window.removeAttribute ? null : initAutomation();
+
+        function initAutomation() {
+            // ১ সেকেন্ড সম্পূর্ণ অন্ধকার থাকার পর বাকি অ্যানিমেশন ফেজগুলো শুরু হবে
+            setTimeout(() => { currentPhase = 1; generate3DStars(); }, 1000);   
+            setTimeout(() => { currentPhase = 2; spawnSlowStars(1000); }, 2000); 
+            setTimeout(() => { speedMultiplier = 2.8; }, 2500); 
+            
+            // টেক্সট রিলিজ টাইমলাইন
+            setTimeout(() => { speedMultiplier = 1.0; triggerText(1); }, 3500);
+            setTimeout(() => { triggerText(2); }, 4500);
+            setTimeout(() => { triggerText(3); }, 5550);
+            setTimeout(() => { triggerText(4); }, 6500);
+            setTimeout(() => { triggerText(5); }, 7500);
+
+            // ছবি এবং নেবুলা ক্লাউড (৮.৫ সেকেন্ডে)
+            setTimeout(() => { 
+                introImg.classList.add('animate-img');
+                document.getElementById('nebula').style.opacity = '1';
+            }, 8500);
+
+            setTimeout(() => { currentPhase = 3; triggerHyperDrive(); }, 10500);  
+            setTimeout(() => { triggerSupernovaComets(); }, 13100); 
+            setTimeout(() => { window.location.href = "Home.html"; }, 15000);   
+        }
+
+        function triggerText(num) {
+            const el = document.getElementById(`l${num}`);
+            if (el) {
+                el.classList.add('animate-text', 'sweep-effect');
+            }
+        }
+
+        // ৩D প্যারালাক্স ব্যাকগ্রাউন্ড
+        function generate3DStars() {
+            const counts = [2500, 1500, 1000]; 
+            for (let layer = 0; layer < 3; layer++) {
+                for (let i = 0; i < counts[layer]; i++) {
+                    bgLayers[layer].push({
+                        baseX: Math.random() * canvas.width,
+                        baseY: Math.random() * canvas.height,
+                        size: (layer + 1) * 0.5 + Math.random() * 0.4, 
+                        alpha: Math.random(),
+                        pulseSpeed: Math.random() * 0.02 + 0.005,
+                        angle: Math.random() * Math.PI * 2,
+                        jitterMax: (layer + 1) * 0.3 
+                    });
+                }
+            }
+        }
+
+        // কৌণিক (Diagonal) তারা
+        function spawnSlowStars(count) {
+            for (let i = 0; i < count; i++) {
+                driftingStars.push({
+                    x: Math.random() * canvas.width + (canvas.width * 0.3),
+                    y: -(Math.random() * canvas.height * 0.5), 
+                    vx: -(Math.random() * 0.8 + 0.5), 
+                    vy: Math.random() * 0.6 + 0.4,    
+                    size: Math.random() * 1.5 + 0.5
+                });
+            }
+        }
+
+        function triggerHyperDrive() {
+            for (let i = 0; i < 300; i++) {
+                setTimeout(() => {
+                    heavyMeteors.push({
+                        x: canvas.width + 30,
+                        y: Math.random() * canvas.height, 
+                        vx: -(Math.random() * 15 + 12), 
+                        vy: Math.random() * 4 - 2,
+                        size: Math.random() * 2.5 + 1.2
+                    });
+                }, Math.random() * 2000);
+            }
+        }
+
+        function triggerSupernovaComets() {
+            launchSupernova = true;
+            const corners = [
+                { x: -60, y: -60 }, { x: canvas.width + 60, y: -60 },        
+                { x: -60, y: canvas.height + 60 }, { x: canvas.width + 60, y: canvas.height + 60 } 
+            ];
+            corners.forEach(corner => {
+                supernovaComets.push({
+                    x: corner.x, y: corner.y,
+                    speed: 1.5, acceleration: 1.14, size: 18 
+                });
+            });
+        }
+
+        function doScreenShake() {
+            isShaking = true;
+            setTimeout(() => { isShaking = false; mainContent.style.transform = 'translate(0px, 0px)'; }, 1400);
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.25)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (isShaking) {
+                let dx = (Math.random() - 0.5) * 18;
+                let dy = (Math.random() - 0.5) * 18;
+                mainContent.style.transform = `translate(${dx}px, ${dy}px)`;
+            }
+
+            // ব্যাকগ্রাউন্ড তারা
+            if (currentPhase >= 1) {
+                ctx.fillStyle = '#ffffff';
+                for (let layer = 0; layer < 3; layer++) {
+                    bgLayers[layer].forEach(star => {
+                        star.alpha += star.pulseSpeed;
+                        if (star.alpha > 1 || star.alpha < 0.1) star.pulseSpeed = -star.pulseSpeed;
+                        
+                        star.angle += 0.06;
+                        const jitterX = Math.cos(star.angle) * star.jitterMax;
+                        const jitterY = Math.sin(star.angle) * star.jitterMax;
+
+                        ctx.globalAlpha = star.alpha;
+                        ctx.fillRect(star.baseX + jitterX, star.baseY + jitterY, star.size, star.size);
+                    });
+                }
+                ctx.globalAlpha = 1.0;
+            }
+
+            // কৌণিক তারা
+            if (currentPhase >= 2) {
+                ctx.fillStyle = '#ffffff';
+                driftingStars.forEach(s => {
+                    s.x += s.vx * speedMultiplier;
+                    s.y += s.vy * speedMultiplier;
+
+                    if (s.x < -20 || s.y > canvas.height + 20) {
+                        s.x = Math.random() * canvas.width + (canvas.width * 0.4);
+                        s.y = -(Math.random() * canvas.height * 0.3);
+                    }
+                    ctx.fillRect(s.x, s.y, s.size, s.size);
+                });
+            }
+
+            // মেটিওরস
+            if (currentPhase === 3) {
+                ctx.fillStyle = '#ffffff';
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = '#00ffff';
+                for (let i = heavyMeteors.length - 1; i >= 0; i--) {
+                    let m = heavyMeteors[i];
+                    m.x += m.vx; m.y += m.vy;
+                    ctx.fillRect(m.x, m.y, m.size * 2, m.size); 
+                    if (m.x < -50) heavyMeteors.splice(i, 1);
+                }
+                ctx.shadowBlur = 0;
+            }
+
+            // ৪ কোণার ৪টি দানব নক্ষত্র বিপুল গতিতে কেন্দ্রে ধাবিত হওয়া
+            if (launchSupernova && supernovaComets.length > 0) {
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+
+                for (let i = supernovaComets.length - 1; i >= 0; i--) {
+                    let sc = supernovaComets[i];
+                    sc.speed *= sc.acceleration;
+
+                    const angle = Math.atan2(centerY - sc.y, centerX - sc.x);
+                    const vx = Math.cos(angle) * sc.speed;
+                    const vy = Math.sin(angle) * sc.speed;
+
+                    sc.x += vx; sc.y += vy;
+
+                    ctx.shadowBlur = 35;
+                    ctx.shadowColor = '#00ffff';
+                    ctx.fillStyle = '#ffffff';
+                    ctx.beginPath();
+                    ctx.arc(sc.x, sc.y, sc.size, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    const dist = Math.hypot(centerX - sc.x, centerY - sc.y);
+                    
+                    if (dist < 40 || sc.speed > 65) {
+                        supernovaComets.splice(0, supernovaComets.length);
+                        showFlash = true; 
+                        shockwaveRadius = 10; 
+                        doScreenShake(); 
+                        break;
+                    }
+                }
+                ctx.shadowBlur = 0;
+            }
+
+            // বাস্তবসম্মত সুপারনোভা ব্লাস্ট ফ্লাশ যা পুরো স্ক্রিন হোয়াইটআউট করবে
+            if (showFlash) {
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                
+                supernovaRadius += 55; 
+                shockwaveRadius += 80; 
+                if (supernovaAlpha < 1.0) supernovaAlpha += 0.08;
+
+                // মহাজাগতিক শকওয়েভ রিং
+                ctx.strokeStyle = `rgba(0, 255, 255, ${1.0 - (shockwaveRadius / (canvas.width * 1.5))})`;
+                ctx.lineWidth = 20;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, shockwaveRadius, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // রিয়েল থ্রিডি গ্রেডিয়েন্ট ব্লাস্ট কোর
+                const gradient = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, supernovaRadius);
+                gradient.addColorStop(0, '#ffffff');          
+                gradient.addColorStop(0.15, '#00ffff');        
+                gradient.addColorStop(0.35, '#ff00ff');        
+                gradient.addColorStop(0.65, '#ffaa00');        
+                gradient.addColorStop(1, 'rgba(0, 0, 0, 0)'); 
+
+                ctx.fillStyle = gradient;
+                ctx.globalAlpha = supernovaAlpha;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, supernovaRadius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+
+                // যখন ব্লাস্টের তীব্র আলো পুরো স্ক্রিনকে গ্রাস করে ফেলবে
+                const maxDiagonal = Math.hypot(canvas.width, canvas.height);
+                if (supernovaRadius > maxDiagonal) {
+                    ctx.fillStyle = '#ffffff'; 
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
