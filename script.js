@@ -1,102 +1,66 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("signInForm");
-  const inputs = form.querySelectorAll(".form-control");
   const submitBtn = document.getElementById("submitBtn");
+  const errorBox = document.getElementById("errorMessages");
+
+  // Input fields
+  const fullName = document.getElementById("fullName");
+  const username = document.getElementById("username");
+  const passcode = document.getElementById("passcode");
+  const gmail = document.getElementById("gmail");
+  const contactNumber = document.getElementById("contactNumber");
+  const age = document.getElementById("age");
+  const profession = document.getElementById("profession");
 
   // Validation function
   function validateForm() {
-    let allFilled = true;
+    let errors = [];
 
-    inputs.forEach(input => {
-      if (input.value.trim() === "") {
-        allFilled = false;
-      }
-    });
-
-    if (allFilled) {
-      submitBtn.disabled = false;
-      submitBtn.style.opacity = "1";
-      submitBtn.style.boxShadow = "0 0 20px #00ffcc";
-    } else {
-      submitBtn.disabled = true;
-      submitBtn.style.opacity = "0.5";
-      submitBtn.style.boxShadow = "none";
+    if (fullName.value.trim() === "") errors.push("Full name is required.");
+    if (username.value.trim() === "") errors.push("Username is required.");
+    if (passcode.value.trim() === "") errors.push("Passcode is required.");
+    if (gmail.value.trim() === "" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(gmail.value.trim())) {
+      errors.push("Enter a valid email address.");
     }
+    if (contactNumber.value.trim().length !== 11 || !/^\d{11}$/.test(contactNumber.value.trim())) {
+      errors.push("Contact number must be exactly 11 digits.");
+    }
+    if (age.value.trim() === "") errors.push("Age is required.");
+    if (profession.value.trim() === "") errors.push("Profession is required.");
+
+    return errors;
   }
 
-  // Check inputs on typing
-  inputs.forEach(input => {
-    input.addEventListener("input", validateForm);
+  // Real-time validation (auto button change + welcome message)
+  form.addEventListener("input", () => {
+    const errors = validateForm();
+
+    if (errors.length > 0) {
+      errorBox.innerText = errors.join("\n");
+      errorBox.style.display = "block";
+      submitBtn.classList.remove("btn-glow"); // remove glow if errors
+    } else {
+      errorBox.innerText = "🎉 Welcome! All fields look perfect, you are ready to Sign In 🎉";
+      errorBox.style.display = "block";
+      submitBtn.classList.add("btn-glow"); // auto glow when valid
+    }
   });
 
-  // Form submission
+  // Final submit check
   form.addEventListener("submit", (e) => {
-    e.preventDefault();
+    const errors = validateForm();
 
-    let valid = true;
-
-    // Full Name
-    if (document.getElementById("fullName").value.trim() === "") {
-      document.getElementById("errorFullName").classList.remove("d-none");
-      valid = false;
+    if (errors.length > 0) {
+      e.preventDefault();
+      errorBox.innerText = errors.join("\n");
+      errorBox.style.display = "block";
+      alert(errors.join("\n"));
     } else {
-      document.getElementById("errorFullName").classList.add("d-none");
-    }
-
-    // Username
-    if (document.getElementById("username").value.trim() === "") {
-      document.getElementById("errorUsername").classList.remove("d-none");
-      valid = false;
-    } else {
-      document.getElementById("errorUsername").classList.add("d-none");
-    }
-
-    // Passcode
-    if (document.getElementById("passcode").value.trim() === "") {
-      document.getElementById("errorPasscode").classList.remove("d-none");
-      valid = false;
-    } else {
-      document.getElementById("errorPasscode").classList.add("d-none");
-    }
-
-    // Gmail validation
-    const gmail = document.getElementById("gmail").value.trim();
-    const gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-    if (!gmailPattern.test(gmail)) {
-      document.getElementById("errorGmail").classList.remove("d-none");
-      valid = false;
-    } else {
-      document.getElementById("errorGmail").classList.add("d-none");
-    }
-
-    // Contact number validation (exactly 11 digits)
-    const contact = document.getElementById("contactNumber").value.trim();
-    if (!/^\d{11}$/.test(contact)) {
-      document.getElementById("errorContact").classList.remove("d-none");
-      valid = false;
-    } else {
-      document.getElementById("errorContact").classList.add("d-none");
-    }
-
-    // Age
-    if (document.getElementById("age").value.trim() === "") {
-      document.getElementById("errorAge").classList.remove("d-none");
-      valid = false;
-    } else {
-      document.getElementById("errorAge").classList.add("d-none");
-    }
-
-    // Profession
-    if (document.getElementById("profession").value.trim() === "") {
-      document.getElementById("errorProfession").classList.remove("d-none");
-      valid = false;
-    } else {
-      document.getElementById("errorProfession").classList.add("d-none");
-    }
-
-    // If everything is valid, go to Home.html
-    if (valid) {
-      window.location.href = "Intro.html";
+      e.preventDefault();
+      errorBox.innerText = "🎉 Redirecting... Welcome to IDAI Universe 🎉";
+      setTimeout(() => {
+        window.location.href = "Intro.html"; // Redirect to Intro.html
+      }, 1000);
     }
   });
 });

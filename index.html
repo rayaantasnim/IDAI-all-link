@@ -22,55 +22,52 @@
             <div class="mb-3">
               <label for="fullName" class="form-label">Full Name</label>
               <input type="text" class="form-control" id="fullName" placeholder="Enter your full name">
-              <small class="text-danger d-none" id="errorFullName">Full name is required</small>
             </div>
 
             <!-- Username -->
             <div class="mb-3">
               <label for="username" class="form-label">User Name</label>
               <input type="text" class="form-control" id="username" placeholder="Choose a username">
-              <small class="text-danger d-none" id="errorUsername">Username is required</small>
             </div>
 
             <!-- Passcode -->
             <div class="mb-3">
               <label for="passcode" class="form-label">Passcode</label>
               <input type="password" class="form-control" id="passcode" placeholder="Enter your password">
-              <small class="text-danger d-none" id="errorPasscode">Passcode is required</small>
             </div>
 
             <!-- Gmail -->
             <div class="mb-3">
               <label for="gmail" class="form-label">G-mail</label>
               <input type="email" class="form-control" id="gmail" placeholder="Enter your Gmail address">
-              <small class="text-danger d-none" id="errorGmail">Enter a valid Gmail address</small>
             </div>
 
             <!-- Contact Number -->
             <div class="mb-3">
               <label for="contactNumber" class="form-label">Contact Number</label>
               <input type="tel" class="form-control" id="contactNumber" placeholder="Enter your phone number">
-              <small class="text-light d-none" id="errorContact">Contact number must be 11 digits</small>
             </div>
 
             <!-- Age -->
             <div class="mb-3">
               <label for="age" class="form-label">Age</label>
               <input type="number" class="form-control" id="age" placeholder="Enter your age">
-              <small class="text-danger d-none" id="errorAge">Age is required</small>
             </div>
 
             <!-- Profession -->
             <div class="mb-3">
               <label for="profession" class="form-label">Profession</label>
               <input type="text" class="form-control" id="profession" placeholder="Enter your profession">
-              <small class="text-danger d-none" id="errorProfession">Profession is required</small>
             </div>
+
+            <!-- Error Messages Placeholder -->
+            <div class="mb-3 text-danger" id="errorMessages"></div>
 
             <!-- Submit Button -->
             <div class="d-grid">
-              <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Sign In</button>
+              <button type="submit" class="btn btn-primary" id="submitBtn">Sign In</button>
             </div>
+
           </form>
         </div>
         <div class="card-footer text-center text-muted">

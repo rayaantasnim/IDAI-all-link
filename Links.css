@@ -88,6 +88,16 @@ img {
   }
 }
 
+html {
+  scroll-behavior: smooth; /* Smooth scrolling */
+}
+
+body {
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  -webkit-overflow-scrolling: touch; /* Better on mobile */
+}
+
+
 /* Media Query for Mobile (max-width: 1100px) */
 @media (max-width: 1100px) {
   h1 {

@@ -1,98 +1,170 @@
-body{
-    font-family: Arial, sans-serif;
-    margin:0;
-    padding-top:150px !important;
-    min-height:100vh;
-    padding:60px 15px;
-    background:linear-gradient(135deg,#eaf8ff,#f7fcff,#ffffff);
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
+/* Global body styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding-top: 200px !important;
+    min-height: 100vh;
+    padding: 60px 15px;
+    background: linear-gradient(135deg, #ffecd2, #fcb69f, #a1c4fd, #c2e9fb);
+    background-size: 400% 400%;
+    animation: gradientBG 18s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 }
 
-.container{
-    width:100%;
-    display:flex;
-    justify-content:center;
+/* Gradient animation */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
-.card{
-    width:100%;
-    max-width:420px;
-    border:none;
-    border-radius:16px;
-    background:#fff;
-    box-shadow:0 10px 30px rgba(0,0,0,.12);
-    overflow:hidden;
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-.card-header{
-    background:#4da8ff;
-    color:#fff;
-    text-align:center;
-    padding:20px;
+.card {
+    width: 100%;
+    max-width: 420px;
+    border: none;
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 15px 40px rgba(0,0,0,.15);
+    overflow: hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
-.card-body{
-    padding:25px;
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0,0,0,.25);
 }
 
-.form-label{
-    font-weight:600;
-    color:#444;
+.card-header {
+    background: linear-gradient(90deg, #ff6a00, #ee0979);
+    color: #fff;
+    text-align: center;
+    padding: 22px;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
-.form-control{
-    height:48px;
-    border-radius:10px;
-    border:1px solid #cfd8dc;
+.card-body {
+    padding: 28px;
 }
 
-.form-control:focus{
-    border-color:#4da8ff;
-    box-shadow:0 0 8px rgba(77,168,255,.3);
+.form-label {
+    font-weight: 600;
+    color: #333;
 }
 
-.btn-primary{
-    width:100%;
-    height:48px;
-    border:none;
-    border-radius:10px;
-    background:#4da8ff;
-    transition:.3s;
+.form-control {
+    height: 48px;
+    border-radius: 12px;
+    border: 1px solid #cfd8dc;
+    transition: all 0.3s ease;
 }
 
-.btn-primary:hover{
-    background:#2f8df5;
+.form-control:focus {
+    border-color: #ee0979;
+    box-shadow: 0 0 10px rgba(238, 9, 121, 0.4);
 }
 
-.card-footer{
-    background:#fafafa;
-    text-align:center;
-    padding:15px;
+/* Button */
+.btn-primary {
+    width: 100%;
+    height: 50px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #ff6a00, #ee0979);
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card-footer a{
-    text-decoration:none;
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(238, 9, 121, 0.5);
 }
 
-@media (max-width:1100px){
+/* Footer */
+.card-footer {
+    background: #fafafa;
+    text-align: center;
+    padding: 15px;
+    font-size: 0.85rem;
+    color: #555;
+}
 
-    body{
-        padding:40px 12px;
+/* Error div styling */
+#errorMessages {
+    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 10px;
+    background: rgba(255, 0, 0, 0.08);
+    color: #d32f2f;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: inset 0 0 8px rgba(211, 47, 47, 0.3);
+}
+
+/* Neon glow effect when valid */
+.btn-glow {
+    background: linear-gradient(90deg, #00f260, #0575e6);
+    box-shadow: 0 0 20px #00f260, 0 0 40px #0575e6;
+    animation: glowPulse 1.5s infinite alternate;
+}
+
+@keyframes glowPulse {
+    from {
+        box-shadow: 0 0 10px #00f260, 0 0 20px #0575e6;
+    }
+    to {
+        box-shadow: 0 0 25px #00f260, 0 0 50px #0575e6;
+    }
+}
+
+/* Media query for screens below 1100px */
+@media (max-width: 1100px) {
+    body {
+        padding: 40px 20px;
+        font-size: 14px;
     }
 
-    .card{
-        width:95% !important;
-        min-width:420px;
-        margin:auto !important;
+    .card {
+        width: 95% !important;
+        margin: 0 auto !important;
+        border-radius: 16px;
+        box-shadow: none;
     }
 
-    .card-body{
-        padding:20px;
+    .card-body {
+        padding: 20px;
     }
 
-    .card-header{
-        padding:18px;
+    .card-header {
+        padding: 18px;
+        font-size: 1.4rem;
+    }
+
+    .form-label {
+        font-size: 0.9rem;
+    }
+
+    .form-control {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    .btn-primary {
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    #errorMessages {
+        font-size: 0.8rem;
+        padding: 10px;
     }
 }
